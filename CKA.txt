@@ -1,0 +1,296 @@
+Exam Environment:
+1. Exam environment: room one, ask quiet no one, desktop clean. You can bring a water cup, but you can't have wrapping paper on it. The examiner will ask for a camera to look at the walls around the exam room, the exam table, and below the desk. Don't put any clutter on your desk, including your passport, and you're required to put it somewhere else after verification.
+2. Exam method: only use chrome browser, will not use other software. Call the camera, microphone, desktop sharing and more via the browser. If you encounter a camera that doesn't allow you to turn it on, but other software does, you can try plugging an external headset or audio device into your computer.
+3. Examiner exchange: chat with the other party full typing, the other party monitoring the whole process, and issued a variety of instructions. The other person will ask us to share the camera, share the desktop, nothing to move. All-English communication, so as long as the English reading ability is good on the line, other times can enter ok the whole process.
+=======================================================================================================================================================================
+
+Q1) You have been asked to create a new ClusterRole for a deployment pipeline and bind it to a specific ServiceAccount scoped to a specific namespace.
+
+Task:
+	Create a clusterrole named deployment-clusterrole, and bind only to create permissions for Deployment, Daemonset, and Statefulset
+	Create a serviceaccount named cid-token in the specified named named namespace app-team1, and create a last-step clusterrole and the serviceaccount binding
+
+Ans.
+#kubectl create clusterrole deployment-clusterrole --verb=create --resource=Deployment,StatefulSet,DaemonSet 
+#kubectl create sa cid-token -n app-team1
+#kubectl create clusterrolebinding <check name as per exam> --clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token
+
+Q2) Set the node named ek8s-node-1 to unavailable and reschedule all allowed pods on the node
+
+Ans.
+	#kubectl drain ek8s-node-1 --delete-local-data --ignore-daemonsets --force
+
+Q3) 
+Given an existing Kubernetes cluster running version 1.18.8, upgrade all of the Kubernetes control plane and node components on the master node only to version 1.19.0.
+You are also expected to upgrade kubelet and kubectl on the master node.
+
+Ans.
+$ kubectl cordon k8s-master
+$ kubectl drain k8s-master--delete-local-data --ignore-daemonsets --force
+$ apt-get upgrade kubeadm=1.19.0-00 kubelet=1.19.0-00 kubectl=1.19.0-00
+$ systemctl restart kubelet
+$ kubeadm upgrade apply v1.19.0
+
+Q4) First create a snapshot of the existing etcd instance running at https://127.0.0.1:2379, saving the snapshot to /srv/data/etcd-snapshot.db
+Next, restore an existing, previous snapshot located at /var/lib/backup/etcd-snapshot-previous.db
+	The Following TLS certificates/key are supplied for connecting to the server with etcdctl:
+	- CA Certificate: /opt/KUIN00601/ca.crt
+	- Client Certificate: /opt/KUIN00601/etcd-client.crt
+	- Client Key: /opt/KUIN00601/etcd-client.key
+
+Ans.
+Take Backup:-
+$ ETCDCTL_API=3  etcdctl --endpoints="https://127.0.0.1:2379" --cacert=/opt/KUIN000601/ca.crt --cert=/opt/KUIN000601/etcd-client.crt --key=/opt/KUIN000601/etcd-client.key  snapshot save /etc/data/etcd-snapshot.db
+Restore:-
+$ ETCDCTL_API=3  etcdctl --endpoints="https://127.0.0.1:2379" --cacert=/opt/KUIN000601/ca.crt --cert=/opt/KUIN000601/etcd-client.crt --key=/opt/KUIN000601/etcd-client.key   snapshot restore /var/lib/backup/etcd-snapshot-previous.db
+
+Q5) Create a new NetworkPolicy named allow-port-from-namespace that allows Pods in the existing namespace internal to connect to port 9000 of other Pods in the same namespace.
+	Ensure that the new NetworkPolicy:
+	- does not allow access to Pods not listening on Port 9000
+	- does not allow access from Pods not in namespace internal.
+
+Ans. 
+#vim np.yml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: all-port-from-namespace
+  namespace: internal
+spec:
+  podSelector:
+    matchLabels: {}
+  ingress:
+  - from:
+    - podSelector: {}
+    ports:
+    - port: 9000
+
+Q6) Reconfigure the existing deployment front-end and add a port specification named http existing port 80/tcp of the existing container nginx.
+	- Create a new service named front-end-svc exposing the container port http.
+	- Configure the new service to also expose the individual Pods via a NodePort on the nodes on which they are scheduled.
+
+Ans. 
+$ kubectl expose deployment front-end --name=front-end-svc --port=80 --tarport=80 --type=NodePort
+
+Q7) Create a new nginx ingress resource as follows:
+	- Name: pong
+	- Namespace: ing-internal
+	- Exposing service hi on path /hi using service port 5678
+The availability of service hi can be checked using the following command, which should return hi:
+	#curl -kL <INTERNAL_IP>/hi
+
+Ans.
+#vim ingress.yml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pong
+  namespace: ing-internal
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /hi
+        pathType: Prefix
+        backend:
+          service:
+            name: hi
+            port:
+              number: 5678
+
+Q8) Scale the deployment loadbalancer to 6 pods.
+
+Ans. $ kubectl scale --replicas=6 deployment/loadbalancer 
+
+
+Q9) Schedule a pod as follows:
+	- Name: nginx-kusc00401
+	- Image: nginx
+	- Node selector: disk=spinning
+
+Ans.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-kusc00401
+  labels:
+    role: nginx-kusc00401
+spec:
+  nodeSelector:
+    disk: spinning
+  containers:
+    - name: nginx
+      image: nginx
+
+Q10) Check to see how many nodes are ready (not including nodes tainted NoSchedule) and write the number to /opt/KUSC00402/kusc00402.txt
+
+Ans.
+$ kubectl get node | grep -i ready
+$ kubectl describe nodes <nodeName>  |  grep -i taints | grep -i noSchedule
+
+Q11) Create a pod named kucc1 with a single app container for each of the following images running inside (there may be between 1 and 4 images specified): nginx-redis-memcached-consul
+
+Ans.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kucc1
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+  - image: redis
+    name: redis
+  - image: memchached
+    name: memcached
+  - image: consul
+    name: consul
+
+Q12) Create a persistent volume with name app-config,of capacity 2Gi and access mode ReadWriteMany. This type of volume is hostPath and its location is /srv/app-config.
+
+Ans.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-config
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/src/app-config"
+
+Q13) Create a new PersistentVolumeClaim:
+	- Name: pv-volume
+	- Class: csi-hostpath-sc
+	- Capacity: 10Mi
+     Create a new pod which mounts the PersistentVolumeClaim as a volume:
+	- Name: web-server
+	- image: nginx
+	- Mount path: /usr/share/nginx/html
+
+     Configure the new pod to have ReadWriteOnce access on the volume.
+
+     Finally using kubectl edit ot kubectl patch expand the PersistentVolumeClaim to a capacity of 70Mi and record that change.
+
+
+Ans.
+
+Create PVC:
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Mi
+  storageClassName: csi-hostpath-sc
+Create Pod:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-server
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+      - mountPath: "/usr/share/nginx/html"
+        name: pv-volume
+  volumes:
+    - name: pv-volume
+      persistentVolumeClaim:
+        claimName: myclaim
+$ kubectl edit pvc pv-volume -> edit the pvc and change the size of we can change with kubectl patch
+
+Q14) Monitor the logs of pod foobar and:
+	- Extract log lines corresponding to error unable-to-access-website
+	- Write them to /opt/KUTR00101/foobar
+
+Ans.
+$ kubectl logs foobar | grep unable-access-website > /opt/KUTR00101/foobar
+$ cat /opt/KUTR00101/foobar
+
+Q15) 
+Context:
+	Without changing its existing containers, and existing Pod needs to be integrated into Kubernetes's built-in logging architecture (e.g kubectl logs). Adding a streaming sidecar contaienr is a good and common way to accomplish this requirement.
+
+Task:
+	- Add a busybox sidecar container to the exisiting Pod legacy-app. The new app sidecar container has to run the following command:
+		/bin/sh -c tail -n+1 -f /var/log/legacy-app.log
+	- Use a volume mount named logs to make the file /var/log/legacy-app.log available to the sidecar container.
+Note: 
+1) Don't modify the existing container
+2) Don't modify the path of the log file, both containers must access it at /var/log/legacy-app.log
+
+Ans.
+#kubectl get pods legacy=app -o yaml > sidecar.yaml
+NOW EDIT THE FILE and add sidecar container
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podname
+spec:
+  containers:
+  - name: count
+    image: busybox
+    args:
+    - /bin/sh
+    - -c
+    - >
+      i=0;
+      while true;
+      do
+        echo "$(date) INFO $i" >> /var/log/legacy-ap.log;
+        i=$((i+1));
+        sleep 1;
+      done
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log
+  - name: count-log-1
+    image: busybox
+    args: [/bin/sh, -c, 'tail -n+1 -f /var/log/legacy-ap.log']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  volumes:
+  - name: logs
+    emptyDir: {}
+
+To verify:-
+$ kubectl logs <pod_name> -c <container_name>
+
+Q16) From the pod label name=cpu-user, find pods running high CPU workloads and write the name of the pod consuming most CPU to the file /opt/KUTR00401/KUTR00401.txt (which already exists).
+
+Ans.
+$ kubectl  top  pod -l name=cpu-user -A
+    NAMAESPACE NAME        CPU   MEM
+    delault    cpu-user-1  45m   6Mi
+    delault    cpu-user-2  38m   6Mi
+    delault    cpu-user-3  35m   7Mi
+    delault    cpu-user-4  32m   10Mi
+
+In above command we can see cpu-user-1 is consuming high cpu.
+$ echo 'cpu-user-1' >>/opt/KUTR00401/KUTR00401.txt
+
+Q17) A kubernetes worker node, named wk8s-node-0 is in state NotReady.
+	Investigate why this is the case, and perform any appropriate steps to bring the node to a Ready state, ensuring that any changes are made permanent.
+
+Ans.
+$ ssh wk8s-node-0
+$ sudo -i
+$ systemctl status kubelet  -> you will see kubelet is not active 
+$ systemctl start kubelet
+$ systemctl enable kubelet 
