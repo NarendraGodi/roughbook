@@ -1,0 +1,112 @@
+31.Your team is designing a new application for deployment into Google Kubernetes Engine (GKE). You need to set up monitoring to collect and aggregate various application-level metrics in a centralized location. You want to use Google Cloud Platform services while minimizing the amount of work required to set up monitoring. What should you do?
+*A. Publish various metrics from the application directly to the Stackdriver Monitoring API, and then observe these custom metrics in Stackdriver.
+B. Install the Cloud Pub/Sub client libraries, push various metrics from the application to various topics, and then observe the aggregated metrics in Stackdriver.
+C. Install the OpenTelemetry client libraries in the application, configure Stackdriver as the export destination for the metrics, and then observe the application's metrics in Stackdriver.
+D. Emit all metrics in the form of application-specific log messages, pass these messages from the containers to the Stackdriver logging collector, and then observe metrics in Stackdriver.
+
+Topic: https://cloud.google.com/kubernetes-engine/docs/concepts/custom-and-external-metrics
+
+Note: OpenTelemetry is a collection of tools, APIs, and SDKs. Use it to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.
+
+While the recommend way is OpenCensus, The answer that checks all the boxes is A.
+1. Using all google cloud services
+2. Minimise Development effort.
+
+https://cloud.google.com/monitoring/custom-metrics
+https://cloud.google.com/monitoring/custom-metrics/creating-metrics
+https://cloud.google.com/monitoring/custom-metrics/open-census
+
+32.You support a production service that runs on a single Compute Engine instance. You regularly need to spend time on recreating the service by deleting the crashing instance and creating a new instance based on the relevant image. You want to reduce the time spent performing manual operations while following Site
+Reliability Engineering principles. What should you do?
+A. File a bug with the development team so they can find the root cause of the crashing instance.
+*B. Create a Managed instance Group with a single instance and use health checks to determine the system status.
+C. Add a Load Balancer in front of the Compute Engine instance and use health checks to determine the system status.
+D. Create a Stackdriver Monitoring dashboard with SMS alerts to be able to start recreating the crashed instance promptly after it was crashed.
+
+33.Your application artifacts are being built and deployed via a CI/CD pipeline. You want the CI/CD pipeline to securely access application secrets. You also want to more easily rotate secrets in case of a security breach. What should you do?
+A. Prompt developers for secrets at build time. Instruct developers to not store secrets at rest.
+B. Store secrets in a separate configuration file on Git. Provide select developers with access to the configuration file.
+*C. Store secrets in Cloud Storage encrypted with a key from Cloud KMS. Provide the CI/CD pipeline with access to Cloud KMS via IAM.
+D. Encrypt the secrets and store them in the source code repository. Store a decryption key in a separate repository and grant your pipeline access to it.
+
+Topic:https://cloud.google.com/security-key-management
+
+34.Your company follows Site Reliability Engineering practices. You are the person in charge of Communications for a large, ongoing incident affecting your customer-facing applications. There is still no estimated time for a resolution of the outage. You are receiving emails from internal stakeholders who want updates on the outage, as well as emails from customers who want to know what is happening. You want to efficiently provide updates to everyone affected by the outage.
+What should you do?
+A. Focus on responding to internal stakeholders at least every 30 minutes. Commit to ג€next updateג€ times.
+*B. Provide periodic updates to all stakeholders in a timely manner. Commit to a ג€next updateג€ time in all communications.
+C. Delegate the responding to internal stakeholder emails to another member of the Incident Response Team. Focus on providing responses directly to customers.
+D. Provide all internal stakeholder emails to the Incident Commander, and allow them to manage internal communications. Focus on providing responses directly to customers.
+
+Topic: https://sre.google/workbook/incident-response/
+
+35.Your team uses Cloud Build for all CI/CD pipelines. You want to use the kubectl builder for Cloud Build to deploy new images to Google Kubernetes Engine
+(GKE). You need to authenticate to GKE while minimizing development effort. What should you do?
+*A. Assign the Container Developer role to the Cloud Build service account.
+B. Specify the Container Developer role for Cloud Build in the cloudbuild.yaml file.
+C. Create a new service account with the Container Developer role and use it to run Cloud Build.
+D. Create a separate step in Cloud Build to retrieve service account credentials and pass these to kubectl.
+
+Topic: https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts
+https://github.com/GoogleCloudPlatform/cloud-builders/tree/master/kubectl
+
+36.You support an application that stores product information in cached memory. For every cache miss, an entry is logged in Stackdriver Logging. You want to visualize how often a cache miss happens over time. What should you do?
+A. Link Stackdriver Logging as a source in Google Data Studio. Filter the logs on the cache misses.
+B. Configure Stackdriver Profiler to identify and visualize when the cache misses occur based on the logs.
+*C. Create a logs-based metric in Stackdriver Logging and a dashboard for that metric in Stackdriver Monitoring.
+D. Configure BigQuery as a sink for Stackdriver Logging. Create a scheduled query to filter the cache miss logs and write them to a separate table.
+
+Topic: https://cloud.google.com/logging/docs/logs-based-metrics#counter-metric
+
+37.You need to deploy a new service to production. The service needs to automatically scale using a Managed Instance Group (MIG) and should be deployed over multiple regions. The service needs a large number of resources for each instance and you need to plan for capacity. What should you do?
+A. Use the n1-highcpu-96 machine type in the configuration of the MIG.
+B. Monitor results of Stackdriver Trace to determine the required amount of resources.
+*C. Validate that the resource requirements are within the available quota limits of each region.
+D. Deploy the service in one region and use a global load balancer to route traffic to this region.
+
+Topic: https://cloud.google.com/compute/quotas
+https://cloud.google.com/compute/quotas#understanding_quotas
+
+38.You are running an application on Compute Engine and collecting logs through Stackdriver. You discover that some personally identifiable information (PII) is leaking into certain log entry fields. All PII entries begin with the text userinfo. You want to capture these log entries in a secure location for later review and prevent them from leaking to Stackdriver Logging. What should you do?
+A. Create a basic log filter matching userinfo, and then configure a log export in the Stackdriver console with Cloud Storage as a sink.
+*B. Use a Fluentd filter plugin with the Stackdriver Agent to remove log entries containing userinfo, and then copy the entries to a Cloud Storage bucket.
+C. Create an advanced log filter matching userinfo, configure a log export in the Stackdriver console with Cloud Storage as a sink, and then configure a log exclusion with userinfo as a filter.
+D. Use a Fluentd filter plugin with the Stackdriver Agent to remove log entries containing userinfo, create an advanced log filter matching userinfo, and then configure a log export in the Stackdriver console with Cloud Storage as a sink.
+
+Topic:https://cloud.google.com/logging/docs/agent/logging/configuration
+
+Note: Fluentd is a cross platform open-source data collection software project originally developed at Treasure Data. It is written primarily in the Ruby programming language.
+
+39.You have a CI/CD pipeline that uses Cloud Build to build new Docker images and push them to Docker Hub. You use Git for code versioning. After making a change in the Cloud Build YAML configuration, you notice that no new artifacts are being built by the pipeline. You need to resolve the issue following Site
+Reliability Engineering practices. What should you do?
+A. Disable the CI pipeline and revert to manually building and pushing the artifacts.
+B. Change the CI pipeline to push the artifacts is Container Registry instead of Docker Hub.
+C. Upload the configuration YAML file to Cloud Storage and use Error Reporting to identify and fix the issue.
+*D. Run a Git compare between the previous and current Cloud Build Configuration files to find and fix the bug.
+
+Topic: https://cloud.google.com/build/docs/interacting-with-dockerhub-images
+
+40.Your company follows Site Reliability Engineering principles. You are writing a postmortem for an incident, triggered by a software change, that severely affected users. You want to prevent severe incidents from happening in the future. What should you do?
+A. Identify engineers responsible for the incident and escalate to their senior management.
+*B. Ensure that test cases that catch errors of this type are run successfully before new software releases.
+C. Follow up with the employees who reviewed the changes and prescribe practices they should follow in the future.
+D. Design a policy that will require on-call teams to immediately call engineers and management to discuss a plan of action if an incident occurs.
+
+Topic: Site Reliability Engineering: How Google Runs Production Systems
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

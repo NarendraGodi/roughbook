@@ -1,0 +1,295 @@
+1. You support a Node.js application running on Google Kubernetes Engine (GKE) in production. The application makes several HTTP requests to dependent applications. You want to anticipate which dependent applications might cause performance issues. What should you do?
+A. Instrument all applications with Stackdriver Profiler.
+*B. Instrument all applications with Stackdriver Trace and review inter-service HTTP requests.
+C. Use Stackdriver Debugger to review the execution of logic within each application to instrument all applications.
+D. Modify the Node.js application to log HTTP request and response times to dependent applications. Use Stackdriver Logging to find dependent applications that are performing poorly.
+
+Topic: https://cloud.google.com/trace/docs/overview
+
+The keyword is "make several requests to dependent app". So you need trace for it.
+
+Cloud Trace
+Find performance bottlenecks in production.
+
+Cloud Profiler
+Continuous CPU and heap profiling to improve performance and reduce costs.
+
+2.You created a Stackdriver chart for CPU utilization in a dashboard within your workspace project. You want to share the chart with your Site Reliability Engineering
+(SRE) team only. You want to ensure you follow the principle of least privilege. What should you do?
+A. Share the workspace Project ID with the SRE team. Assign the SRE team the Monitoring Viewer IAM role in the workspace project.
+B. Share the workspace Project ID with the SRE team. Assign the SRE team the Dashboard Viewer IAM role in the workspace project.
+*C. Click ג€Share chart by URLג€ and provide the URL to the SRE team. Assign the SRE team the Monitoring Viewer IAM role in the workspace project.
+D. Click ג€Share chart by URLג€ and provide the URL to the SRE team. Assign the SRE team the Dashboard Viewer IAM role in the workspace project.
+
+
+Topic:  C is the answer.
+
+https://cloud.google.com/monitoring/access-control#mon_roles_desc
+roles/monitoring.viewer
+- Monitoring Viewer Grants read-only access to Monitoring in the Google Cloud console and API.
+
+https://cloud.google.com/monitoring/access-control#dashboard_roles_desc
+https://cloud.google.com/monitoring/access-control
+
+3.Your organization wants to implement Site Reliability Engineering (SRE) culture and principles. Recently, a service that you support had a limited outage. A manager on another team asks you to provide a formal explanation of what happened so they can action remediations. What should you do?
+A. Develop a postmortem that includes the root causes, resolution, lessons learned, and a prioritized list of action items. Share it with the manager only.
+*B. Develop a postmortem that includes the root causes, resolution, lessons learned, and a prioritized list of action items. Share it on the engineering organization's document portal.
+C. Develop a postmortem that includes the root causes, resolution, lessons learned, the list of people responsible, and a list of action items for each person. Share it with the manager only.
+D. Develop a postmortem that includes the root causes, resolution, lessons learned, the list of people responsible, and a list of action items for each person. Share it on the engineering organization's document portal.
+
+
+4.You have a set of applications running on a Google Kubernetes Engine (GKE) cluster, and you are using Stackdriver Kubernetes Engine Monitoring. You are bringing a new containerized application required by your company into production. This application is written by a third party and cannot be modified or reconfigured. The application writes its log information to /var/log/app_messages.log, and you want to send these log entries to Stackdriver Logging. What should you do?
+A. Use the default Stackdriver Kubernetes Engine Monitoring agent configuration.
+*B. Deploy a Fluentd daemonset to GKE. Then create a customized input and output configuration to tail the log file in the application's pods and write to Stackdriver Logging.
+C. Install Kubernetes on Google Compute Engine (GCE) and redeploy your applications. Then customize the built-in Stackdriver Logging configuration to tail the log file in the application's pods and write to Stackdriver Logging.
+D. Write a script to tail the log file within the pod and write entries to standard output. Run the script as a sidecar container with the application's pod. Configure a shared volume between the containers to allow the script to have read access to /var/log in the application container.
+
+Topic: https://cloud.google.com/architecture/best-practices-for-operating-containers#log_aggregator_sidecar_pattern
+https://cloud.google.com/stackdriver/docs/solutions/gke/managing-logs#custom_agents
+https://cloud.google.com/architecture/customizing-stackdriver-logs-fluentd
+https://docs.fluentd.org/input/tail
+https://cloud.google.com/logging/docs/agent/logging/configuration#configure
+
+5.You are running an application in a virtual machine (VM) using a custom Debian image. The image has the Stackdriver Logging agent installed. The VM has the cloud-platform scope. The application is logging information via syslog. You want to use Stackdriver Logging in the Google Cloud Platform Console to visualize the logs. You notice that syslog is not showing up in the "All logs" dropdown list of the Logs Viewer. What is the first thing you should do?
+A. Look for the agent's test log entry in the Logs Viewer.
+B. Install the most recent version of the Stackdriver agent.
+C. Verify the VM service account access scope includes the monitoring.write scope.
+*D. SSH to the VM and execute the following commands on your VM: ps ax | grep fluentd.
+
+Topic:https://cloud.google.com/compute/docs/access/service- read
+https://cloud.google.com/logging/docs/agent/logging/troubleshooting#checklist
+
+6.You use a multiple step Cloud Build pipeline to build and deploy your application to Google Kubernetes Engine (GKE). You want to integrate with a third-party monitoring platform by performing a HTTP POST of the build information to a webhook. You want to minimize the development effort. What should you do?
+A. Add logic to each Cloud Build step to HTTP POST the build information to a webhook.
+B. Add a new step at the end of the pipeline in Cloud Build to HTTP POST the build information to a webhook.
+C. Use Stackdriver Logging to create a logs-based metric from the Cloud Build logs. Create an Alert with a Webhook notification type.
+*D. Create a Cloud Pub/Sub push subscription to the Cloud Build cloud-builds PubSub topic to HTTP POST the build information to a webhook.
+
+Topic: https://cloud.google.com/pubsub/docs/push
+https://cloud.google.com/build/docs/subscribe-build-notifications
+https://cloud.google.com/build/docs/subscribe-build-notifications#push
+https://medium.com/google-cloud/cloud-build-notifications-with-cloud-run-and-c-a23294e2e959
+
+7.You use Spinnaker to deploy your application and have created a canary deployment stage in the pipeline. Your application has an in-memory cache that loads objects at start time. You want to automate the comparison of the canary version against the production version. How should you configure the canary analysis?
+*A. Compare the canary with a new deployment of the current production version.
+B. Compare the canary with a new deployment of the previous production version.
+C. Compare the canary with the existing deployment of the current production version.
+D. Compare the canary with the average performance of a sliding window of previous production versions.
+
+Spinnaker ==> Spinnaker is an open source, multi-cloud continuous delivery platform for releasing software changes with high velocity and confidence.
+
+Topic:https://spinnaker.io/guides/user/canary/
+https://cloud.google.com/architecture/automated-canary-analysis-kubernetes-engine-spinnaker
+https://spinnaker.io/guides/user/canary/best-practices/#compare-canary-against-baseline-not-against-production
+
+8.You support a high-traffic web application and want to ensure that the home page loads in a timely manner. As a first step, you decide to implement a Service Level Indicator (SLI) to represent home page request latency with an acceptable page load time set to 100 ms. What is the Google-recommended way of calculating this SLI?
+A. Bucketize the request latencies into ranges, and then compute the percentile at 100 ms.
+B. Bucketize the request latencies into ranges, and then compute the median and 90th percentiles.
+*C. Count the number of home page requests that load in under 100 ms, and then divide by the total number of home page requests.
+D. Count the number of home page request that load in under 100 ms, and then divide by the total number of all web application requests.
+
+Topic: https://sre.google/workbook/implementing-slos/
+
+9.You deploy a new release of an internal application during a weekend maintenance window when there is minimal user tragic. After the window ends, you learn that one of the new features isn't working as expected in the production environment. After an extended outage, you roll back the new release and deploy a fix.
+You want to modify your release process to reduce the mean time to recovery so you can avoid extended outages in the future. What should you do? (Choose two.)
+A. Before merging new code, require 2 different peers to review the code changes.
+*B. Adopt the blue/green deployment strategy when releasing new code via a CD server.
+C. Integrate a code linting tool to validate coding standards before any code is accepted into the repository.
+D. Require developers to run automated integration tests on their local development environments before release.
+*E. Configure a CI server. Add a suite of unit tests to your code and have your CI server run them on commit and verify any changes.
+
+10.You have a pool of application servers running on Compute Engine. You need to provide a secure solution that requires the least amount of configuration and allows developers to easily access application logs for troubleshooting. How would you implement the solution on GCP?
+*A. ג€¢ Deploy the Stackdriver logging agent to the application servers. ג€¢ Give the developers the IAM Logs Viewer role to access Stackdriver and view logs.
+B. ג€¢ Deploy the Stackdriver logging agent to the application servers. ג€¢ Give the developers the IAM Logs Private Logs Viewer role to access Stackdriver and view logs.
+C. ג€¢ Deploy the Stackdriver monitoring agent to the application servers. ג€¢ Give the developers the IAM Monitoring Viewer role to access Stackdriver and view metrics.
+D. ג€¢ Install the gsutil command line tool on your application servers. ג€¢ Write a script using gsutil to upload your application log to a Cloud Storage bucket, and then schedule it to run via cron every 5 minutes. ג€¢ Give the developers the IAM Object Viewer access to view the logs in the specified bucket.
+
+Topic: https://cloud.google.com/logging/docs/access-control
+
+11.You support the backend of a mobile phone game that runs on a Google Kubernetes Engine (GKE) cluster. The application is serving HTTP requests from users.
+You need to implement a solution that will reduce the network cost. What should you do?
+A. Configure the VPC as a Shared VPC Host project.
+B. Configure your network services on the Standard Tier.
+C. Configure your Kubernetes cluster as a Private Cluster.
+*D. Configure a Google Cloud HTTP Load Balancer as Ingress.
+
+Topic: https://cloud.google.com/solutions/prep-kubernetes-engine-for-prod
+
+https://cloud.google.com/architecture/best-practices-for-running-cost-effective-kubernetes-applications-on-gke
+https://cloud.google.com/architecture/best-practices-for-running-cost-effective-kubernetes-applications-on-gke#use_container-native_load_balancing_through_ingress
+https://cloud.google.com/vpc/network-pricing
+
+12.You encountered a major service outage that affected all users of the service for multiple hours. After several hours of incident management, the service returned to normal, and user access was restored. You need to provide an incident summary to relevant stakeholders following the Site Reliability Engineering recommended practices. What should you do first?
+A. Call individual stakeholders to explain what happened.
+*B. Develop a post-mortem to be distributed to stakeholders.
+C. Send the Incident State Document to all the stakeholders.
+D. Require the engineer responsible to write an apology email to all stakeholders.
+
+13.You are performing a semi-annual capacity planning exercise for your flagship service. You expect a service user growth rate of 10% month-over-month over the next six months. Your service is fully containerized and runs on Google Cloud Platform (GCP), using a Google Kubernetes Engine (GKE) Standard regional cluster on three zones with cluster autoscaler enabled. You currently consume about 30% of your total deployed CPU capacity, and you require resilience against the failure of a zone. You want to ensure that your users experience minimal negative impact as a result of this growth or as a result of zone failure, while avoiding unnecessary costs. How should you prepare to handle the predicted growth?
+*A. Verify the maximum node pool size, enable a horizontal pod autoscaler, and then perform a load test to verify your expected resource needs.
+B. Because you are deployed on GKE and are using a cluster autoscaler, your GKE cluster will scale automatically, regardless of growth rate.
+C. Because you are at only 30% utilization, you have significant headroom and you won't need to add any additional capacity for this rate of growth.
+D. Proactively add 60% more node capacity to account for six months of 10% growth rate, and then perform a load test to make sure you have enough capacity.
+
+Topic: https://cloud.google.com/kubernetes-engine/docs/concepts/horizontalpodautoscaler
+
+14.Your application images are built and pushed to Google Container Registry (GCR). You want to build an automated pipeline that deploys the application when the image is updated while minimizing the development effort. What should you do?
+A. Use Cloud Build to trigger a Spinnaker pipeline.
+*B. Use Cloud Pub/Sub to trigger a Spinnaker pipeline.
+C. Use a custom builder in Cloud Build to trigger Jenkins pipeline.
+D. Use Cloud Pub/Sub to trigger a custom deployment service running in Google Kubernetes Engine (GKE).
+
+Topic: https://cloud.google.com/architecture/continuous-delivery-toolchain-spinnaker-cloud#triggering_a_spinnaker_pipeline_when_a_docker_image_is_pushed_to_container_registry
+
+https://spinnaker.io/guides/user/pipeline/triggers/pubsub/
+
+15.Your product is currently deployed in three Google Cloud Platform (GCP) zones with your users divided between the zones. You can fail over from one zone to another, but it causes a 10-minute service disruption for the affected users. You typically experience a database failure once per quarter and can detect it within five minutes. You are cataloging the reliability risks of a new real-time chat feature for your product. You catalog the following information for each risk:
+* Mean Time to Detect (MTTD) in minutes
+* Mean Time to Repair (MTTR) in minutes
+* Mean Time Between Failure (MTBF) in days
+* User Impact Percentage
+The chat feature requires a new database system that takes twice as long to successfully fail over between zones. You want to account for the risk of the new database failing in one zone. What would be the values for the risk of database failover with the new system?
+A. MTTD: 5 MTTR: 10 MTBF: 90 Impact: 33%
+*B. MTTD: 5 MTTR: 20 MTBF: 90 Impact: 33%
+C. MTTD: 5 MTTR: 10 MTBF: 90 Impact: 50%
+D. MTTD: 5 MTTR: 20 MTBF: 90 Impact: 50%
+
+Topic:MTTD: 5 minutes
+MTTR: 20 minutes (twice the time)
+Impact: 33% (1 of 3 zones impacted)
+
+16.You are managing the production deployment to a set of Google Kubernetes Engine (GKE) clusters. You want to make sure only images which are successfully built by your trusted CI/CD pipeline are deployed to production. What should you do?
+A. Enable Cloud Security Scanner on the clusters.
+B. Enable Vulnerability Analysis on the Container Registry.
+C. Set up the Kubernetes Engine clusters as private clusters.
+*D. Set up the Kubernetes Engine clusters with Binary Authorization.
+
+Topic: https://cloud.google.com/binary-authorization
+
+17.You support an e-commerce application that runs on a large Google Kubernetes Engine (GKE) cluster deployed on-premises and on Google Cloud Platform. The application consists of microservices that run in containers. You want to identify containers that are using the most CPU and memory. What should you do?
+*A. Use Stackdriver Kubernetes Engine Monitoring.
+B. Use Prometheus to collect and aggregate logs per container, and then analyze the results in Grafana.
+C. Use the Stackdriver Monitoring API to create custom metrics, and then organize your containers using groups.
+D. Use Stackdriver Logging to export application logs to BigQuery, aggregate logs per container, and then analyze CPU and memory consumption.
+
+Topic: https://cloud.google.com/anthos/clusters/docs/on-prem(GKE on-prem is also called Anthos clusters on VMware)
+https://cloud.google.com/stackdriver/docs/solutions/gke
+https://cloud.google.com/anthos/clusters/docs/on-prem/latest/concepts/logging-and-monitoring#logging_and_monitoring
+https://cloud.google.com/stackdriver/docs/solutions/gke#about-skm
+
+18.Your company experiences bugs, outages, and slowness in its production systems. Developers use the production environment for new feature development and bug fixes. Configuration and experiments are done in the production environment, causing outages for users. Testers use the production environment for load testing, which often slows the production systems. You need to redesign the environment to reduce the number of bugs and outages in production and to enable testers to toad test new features. What should you do?
+A. Create an automated testing script in production to detect failures as soon as they occur.
+B. Create a development environment with smaller server capacity and give access only to developers and testers.
+C. Secure the production environment to ensure that developers can't change it and set up one controlled update per year.
+*D. Create a development environment for writing code and a test environment for configurations, experiments, and load testing.
+
+19.You support an application running on App Engine. The application is used globally and accessed from various device types. You want to know the number of connections. You are using Stackdriver Monitoring for App Engine. What metric should you use?
+*A. flex/connections/current
+B. tcp_ssl_proxy/new_connections
+C. tcp_ssl_proxy/open_connections
+D. flex/instance/connections/current
+
+Topic: https://cloud.google.com/monitoring/api/metrics_gcp#gcp-appengineflex/connections/current
+
+20.You support an application deployed on Compute Engine. The application connects to a Cloud SQL instance to store and retrieve data. After an update to the application, users report errors showing database timeout messages. The number of concurrent active users remained stable. You need to find the most probable cause of the database timeout. What should you do?
+A. Check the serial port logs of the Compute Engine instance.
+*B. Use Stackdriver Profiler to visualize the resources utilization throughout the application.
+C. Determine whether there is an increased number of connections to the Cloud SQL instance.
+D. Use Cloud Security Scanner to see whether your Cloud SQL is under a Distributed Denial of Service (DDoS) attack.
+
+Topic: https://stackoverflow.com/questions/69919454/high-cpu-usage-on-cloud-sql-causing-timeouts
+https://cloud.google.com/profiler/docs/about-profiler
+
+21.Your application images are built using Cloud Build and pushed to Google Container Registry (GCR). You want to be able to specify a particular version of your application for deployment based on the release version tagged in source control. What should you do when you push the image?
+A. Reference the image digest in the source control tag.
+B. Supply the source control tag as a parameter within the image name.
+*C. Use Cloud Build to include the release version tag in the application image.
+D. Use GCR digest versioning to match the image to the tag in source control.
+
+Topic: https://cloud.google.com/build/docs/build-push-docker-image#build_an_image_using_a_build_config_file
+https://cloud.google.com/container-registry/docs/pushing-and-pulling
+
+22.You are on-call for an infrastructure service that has a large number of dependent systems. You receive an alert indicating that the service is failing to serve most of its requests and all of its dependent systems with hundreds of thousands of users are affected. As part of your Site Reliability Engineering (SRE) incident management protocol, you declare yourself Incident Commander (IC) and pull in two experienced people from your team as Operations Lead (OL) and
+Communications Lead (CL). What should you do next?
+A. Look for ways to mitigate user impact and deploy the mitigations to production.
+B. Contact the affected service owners and update them on the status of the incident.
+*C. Establish a communication channel where incident responders and leads can communicate with each other.
+D. Start a postmortem, add incident information, circulate the draft internally, and ask internal stakeholders for input.
+
+Topic: https://sre.google/workbook/incident-response/
+https://sre.google/sre-book/managing-incidents/
+
+Note: Take a look at A as well.
+
+23.You are developing a strategy for monitoring your Google Cloud Platform (GCP) projects in production using Stackdriver Workspaces. One of the requirements is to be able to quickly identify and react to production environment issues without false alerts from development and staging projects. You want to ensure that you adhere to the principle of least privilege when providing relevant team members with access to Stackdriver Workspaces. What should you do?
+A. Grant relevant team members read access to all GCP production projects. Create Stackdriver workspaces inside each project.
+B. Grant relevant team members the Project Viewer IAM role on all GCP production projects. Create Stackdriver workspaces inside each project.
+C. Choose an existing GCP production project to host the monitoring workspace. Attach the production projects to this workspace. Grant relevant team members read access to the Stackdriver Workspace.
+*D. Create a new GCP monitoring project and create a Stackdriver Workspace inside it. Attach the production projects to this workspace. Grant relevant team members read access to the Stackdriver Workspace.
+
+Topic: https://cloud.google.com/monitoring/settings/multiple-projects
+
+
+24.You currently store the virtual machine (VM) utilization logs in Stackdriver. You need to provide an easy-to-share interactive VM utilization dashboard that is updated in real time and contains information aggregated on a quarterly basis. You want to use Google Cloud Platform solutions. What should you do?
+*A. 1. Export VM utilization logs from Stackdriver to BigQuery. 2. Create a dashboard in Data Studio. 3. Share the dashboard with your stakeholders.
+B. 1. Export VM utilization logs from Stackdriver to Cloud Pub/Sub. 2. From Cloud Pub/Sub, send the logs to a Security Information and Event Management (SIEM) system. 3. Build the dashboards in the SIEM system and share with your stakeholders.
+C. 1. Export VM utilization logs from Stackdriver to BigQuery. 2. From BigQuery, export the logs to a CSV file. 3. Import the CSV file into Google Sheets. 4. Build a dashboard in Google Sheets and share it with your stakeholders.
+D. 1. Export VM utilization logs from Stackdriver to a Cloud Storage bucket. 2. Enable the Cloud Storage API to pull the logs programmatically. 3. Build a custom data visualization application. 4. Display the pulled logs in a custom dashboard.
+
+Topic: https://cloud.google.com/logging/docs/export/configure_export_v2
+
+25.You need to run a business-critical workload on a fixed set of Compute Engine instances for several months. The workload is stable with the exact amount of resources allocated to it. You want to lower the costs for this workload without any performance implications. What should you do?
+*A. Purchase Committed Use Discounts.
+B. Migrate the instances to a Managed Instance Group.
+C. Convert the instances to preemptible virtual machines.
+D. Create an Unmanaged Instance Group for the instances used to run the workload.
+
+Topic: https://cloud.google.com/compute/docs/instances/signing-up-committed-use-discounts#before-you-begin
+https://cloud.google.com/compute/vm-instance-pricing#general-purpose_machine_type_family
+
+26.You are part of an organization that follows SRE practices and principles. You are taking over the management of a new service from the Development Team, and you conduct a Production Readiness Review (PRR). After the PRR analysis phase, you determine that the service cannot currently meet its Service Level
+Objectives (SLOs). You want to ensure that the service can meet its SLOs in production. What should you do next?
+A. Adjust the SLO targets to be achievable by the service so you can bring it into production.
+B. Notify the development team that they will have to provide production support for the service.
+*C. Identify recommended reliability improvements to the service to be completed before handover.
+D. Bring the service into production with no SLOs and build them when you have collected operational data.
+
+27.You are running an experiment to see whether your users like a new feature of a web application. Shortly after deploying the feature as a canary release, you receive a spike in the number of 500 errors sent to users, and your monitoring reports show increased latency. You want to quickly minimize the negative impact on users. What should you do first?
+*A. Roll back the experimental canary release.
+B. Start monitoring latency, traffic, errors, and saturation.
+C. Record data for the postmortem document of the incident.
+D. Trace the origin of 500 errors and the root cause of increased latency.
+
+Topic: https://cloud.google.com/solutions/automated-canary-analysis-kubernetes-engine-spinnaker
+
+28.You are responsible for creating and modifying the Terraform templates that define your Infrastructure. Because two new engineers will also be working on the same code, you need to define a process and adopt a tool that will prevent you from overwriting each other's code. You also want to ensure that you capture all updates in the latest version. What should you do?
+A. ג€¢ Store your code in a Git-based version control system. ג€¢ Establish a process that allows developers to merge their own changes at the end of each day. ג€¢ Package and upload code to a versioned Cloud Storage basket as the latest master version.
+*B. ג€¢ Store your code in a Git-based version control system. ג€¢ Establish a process that includes code reviews by peers and unit testing to ensure integrity and functionality before integration of code. ג€¢ Establish a process where the fully integrated code in the repository becomes the latest master version.
+C. ג€¢ Store your code as text files in Google Drive in a defined folder structure that organizes the files. ג€¢ At the end of each day, confirm that all changes have been captured in the files within the folder structure. ג€¢ Rename the folder structure with a predefined naming convention that increments the version.
+D. ג€¢ Store your code as text files in Google Drive in a defined folder structure that organizes the files. ג€¢ At the end of each day, confirm that all changes have been captured in the files within the folder structure and create a new .zip archive with a predefined naming convention. ג€¢ Upload the .zip archive to a versioned Cloud Storage bucket and accept it as the latest version.
+
+29.You support a high-traffic web application with a microservice architecture. The home page of the application displays multiple widgets containing content such as the current weather, stock prices, and news headlines. The main serving thread makes a call to a dedicated microservice for each widget and then lays out the homepage for the user. The microservices occasionally fail; when that happens, the serving thread serves the homepage with some missing content. Users of the application are unhappy if this degraded mode occurs too frequently, but they would rather have some content served instead of no content at all. You want to set a Service Level Objective (SLO) to ensure that the user experience does not degrade too much. What Service Level Indicator (SLI) should you use to measure this?
+*A. A quality SLI: the ratio of non-degraded responses to total responses.
+B. An availability SLI: the ratio of healthy microservices to the total number of microservices.
+C. A freshness SLI: the proportion of widgets that have been updated within the last 10 minutes.
+D. A latency SLI: the ratio of microservice calls that complete in under 100 ms to the total number of microservice calls.
+
+Topic: https://cloud.google.com/architecture/adopting-slos
+https://cloud.google.com/architecture/adopting-slos#sli-quality
+https://cloud.google.com/blog/products/gcp/available-or-not-that-is-the-question-cre-life-lessons
+
+30.You support a multi-region web service running on Google Kubernetes Engine (GKE) behind a Global HTTP/S Cloud Load Balancer (CLB). For legacy reasons, user requests first go through a third-party Content Delivery Network (CDN), which then routes traffic to the CLB. You have already implemented an availability
+Service Level Indicator (SLI) at the CLB level. However, you want to increase coverage in case of a potential load balancer misconfiguration, CDN failure, or other global networking catastrophe. Where should you measure this new SLI? (Choose two.)
+A. Your application servers' logs.
+*B. Instrumentation coded directly in the client.
+C. Metrics exported from the application servers.
+D. GKE health checks for your application servers.
+*E. A synthetic client that periodically sends simulated user requests.
+
+Topic: https://cloud.google.com/architecture/adopting-slos#choosing_a_measurement_method
+
+Note: as there is an SLI already configured at LB level and they want to increase the coverage then I we need SLI which will detect CDN/LB failures as well.
+running health checks at application/server level wont cover this.
+so according to me option B & E are correct which are outside of the GCP infra, which give more coverage and resembles the use behavior
+
+
