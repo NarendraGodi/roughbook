@@ -28,7 +28,7 @@ SLAs are external promises made to the customer, while SLOs are internal promise
 need to be met so that SLAs are not violated
 
 
-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
+Z2l0aHViX3BhdF8xMUFDQzNBWVkwMWR6Y29kYVlkejQxX0swWEVIZmtSWkd6dFdwUEVSTm8xUHM2MURaQVp4ZFR0U3lKdE5ZZXFxUzFLRDNTU1hZTGU4Vk10azBaCg==
 
 git config --global user.name "NarendraGodi"
 git config --global user.email "narendragodi@gmail.com"
