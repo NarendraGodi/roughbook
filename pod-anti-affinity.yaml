@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server
+spec:
+  selector:
+    matchLabels:
+      app: web-store
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: web-store
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: env
+                operator: In
+                values:
+                - prd
+            topologyKey: "kubernetes.io/hostname"
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: dc
+                operator: In
+                values:
+                - hyd
+            topologyKey: "kubernetes.io/hostname"
+      tolerations:
+      - key: color
+        operator: Exists
+        effect: NoSchedule  
+      containers:
+      - name: web-app
+        image: nginx
