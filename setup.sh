@@ -1,4 +1,5 @@
 kubectl create ns app-team1
+kubectl create ns ing-internal
 
 kubectl create ns internal
 
@@ -34,7 +35,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: podname
+  name: legacy-app
 spec:
   containers:
   - name: count
@@ -53,6 +54,8 @@ spec:
     volumeMounts:
     - name: logs
       mountPath: /var/log
+  - name: count
+    image: nginx
   volumes:
   - name: logs
     emptyDir: {}
