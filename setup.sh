@@ -1,4 +1,5 @@
 kubectl create ns app-team1
+kubectl create ns ing-internal
 
 kubectl create ns internal
 
@@ -53,6 +54,8 @@ spec:
     volumeMounts:
     - name: logs
       mountPath: /var/log
+  - name: count
+    image: nginx
   volumes:
   - name: logs
     emptyDir: {}
