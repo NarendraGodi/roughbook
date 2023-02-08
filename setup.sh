@@ -34,7 +34,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: podname
+  name: legacy-app
 spec:
   containers:
   - name: count
