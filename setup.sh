@@ -62,8 +62,8 @@ spec:
 EOF
 
 kubectl run my-pod --image=nginx -l name=cpu-user
-kubectl run my-pod1 --image=nginx -l name=cpu-user
-kubectl run my-pod2 --image=nginx -l name=cpu-user
+kubectl run my-pod1 --image=narendragodi/tomcat_deploy -l name=cpu-user
+kubectl run my-pod2 --image=narendragodi/pod_hostname -l name=cpu-user
 
 kubectl create deploy drain-deploy --image=nginx --replicas=8
 
