@@ -12,9 +12,10 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: csi-hostpath-sc
-provisioner: kubernetes.io/gce-pd
+provisioner: example.com/nfs
 parameters:
-  type: pd-standard
+  archiveOnDelete: "false"
+allowVolumeExpansion: true
 EOF
 
 cat <<EOF | kubectl apply -f -
@@ -69,4 +70,4 @@ kubectl create deploy drain-deploy --image=nginx --replicas=8
 
 kubectl taint node $(kubectl get nodes|awk 'NR == 3 {print $1}') cka=true:NoSchedule
 
-kubectl label node $(kubectl get nodes|awk 'NR == 2 {print $1}') disk=spinning
+kubectl label node $(kubectl get nodes|awk 'NR == 4 {print $1}') disk=spinning
