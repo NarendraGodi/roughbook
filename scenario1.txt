@@ -1,0 +1,31 @@
+
+Step1:
+
+# Create a VPC (vpc-1) with two subnets(subnet-1 = us-central1, subnet2=us-east1)
+
+gcloud compute networks create vpc-1 --project=vasu-98053 --description=subnet-1\ =\ us-central1,\ subnet2=us-east1 --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
+
+gcloud compute networks subnets create subnet-1 --project=vasu-98053 --range=10.1.0.0/24 --stack-type=IPV4_ONLY --network=vpc-1 --region=us-central1
+
+gcloud compute networks subnets create subnet2 --project=vasu-98053 --range=10.2.0.0/24 --stack-type=IPV4_ONLY --network=vpc-1 --region=us-east1
+
+# Create 3 VMs (vm-subnet-1,vm-subnet-2,vm-subnet-3) under subnet-1 with tags s1-1, s1-2, s1-3 respectively.
+
+gcloud compute instances create vm-subnet1-1 --project=vasu-98053 --zone=us-central1-c --machine-type=f1-micro --network-interface=,subnet=subnet-1 \
+--tags=s1-1 --create-disk=auto-delete=yes,boot=yes,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230206
+
+gcloud compute instances create vm-subnet1-2 --project=vasu-98053 --zone=us-central1-c --machine-type=f1-micro --network-interface=,subnet=subnet-1 \
+--tags=s1-2 --create-disk=auto-delete=yes,boot=yes,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230206
+
+gcloud compute instances create vm-subnet1-3 --project=vasu-98053 --zone=us-central1-c --machine-type=f1-micro --network-interface=,subnet=subnet-1 \
+--tags=s1-3 --create-disk=auto-delete=yes,boot=yes,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230206
+
+# Create 2 VMs (vm-subnet2-1,vm-subnet2-2) under subnet-1 with tags s1-1, s1-2, s1-3 respectively.
+
+gcloud compute instances create vm-subnet2-1 --project=vasu-98053 --zone=us-east1-b --machine-type=f1-micro --network-interface=,subnet=subnet-1 \
+--tags=s2-1 --create-disk=auto-delete=yes,boot=yes,device-name=vm-subnet-1,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230206
+
+gcloud compute instances create vm-subnet2-2 --project=vasu-98053 --zone=us-east1-b --machine-type=f1-micro --network-interface=,subnet=subnet-1 \
+--tags=s2-2 --create-disk=auto-delete=yes,boot=yes,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230206
+
+
