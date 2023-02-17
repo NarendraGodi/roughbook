@@ -3,5 +3,5 @@
 
 ## How to check if all the servers handled by Ansible are up or not?
 ```bash
-ansible all -a uptime
+ansible -i hosts all -a uptime
 ```
