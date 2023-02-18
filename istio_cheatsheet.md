@@ -25,9 +25,10 @@ istioctl manifest apply --set profile=demo
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samples/addons/kiali.yaml
 
 ```
-## Install Kiali
+## Install Grafana
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samples/addons/kiali.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samples/addons/grafana.yaml
+
 
 ```
 ## Install Prometheus
@@ -35,6 +36,12 @@ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samp
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samples/addons/prometheus.yaml
 
 ```
+## Port Forward command
+```bash
+kubectl --namespace istio-system port-forward <podname> port:port &
+
+```
+
 ## After Installation Clone the below repo
 ```bash
 https://github.com/NarendraGodi/kubernetes-communication.git
