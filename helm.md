@@ -81,6 +81,8 @@ helm install firstapp mychart
 helm lint (will validate all the files for syntactical errors and gives us errors if any in all the files)
 
 
+** helm template will give the output but does not validate "--dry-run" will validate.
+
 
 
 
