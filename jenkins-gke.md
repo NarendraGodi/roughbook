@@ -9,8 +9,10 @@ Jenkins Installation
  java -version
  
 # Installation of Jenkins
+
 curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
@@ -18,6 +20,7 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 sudo apt-get update
 
 sudo apt-get install jenkins
+
 # Confirm "Y" whenever prompted
 ```
 ## Installation of gcloud CLI
@@ -29,11 +32,13 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 
 sudo apt-get update && sudo apt-get install google-cloud-cli
+
 # Confirm "Y" whenever prompted
 ```
 ## For Jenkins to use Service account to connect to GCP Install 
 ```bash
 # Important changes to Kubectl authentication are coming in GKE v1.26
+
 sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
 
 gke-gcloud-auth-plugin --version
