@@ -1,4 +1,6 @@
 
+https://jhooq.com/categories/helm-chart/
+
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 helm repo list
